@@ -40,17 +40,9 @@ An ASP.NET MVC-based web application that simulates a real-world job portal. It 
 ├── Scripts/
 └── README.md
 
-yaml
-Copy
-Edit
 
 ---
 
-## 📸 Screenshots
-
-> *You can add images later showing job list, post job form, or apply form*
-
----
 
 ## 🔧 Setup Instructions
 
