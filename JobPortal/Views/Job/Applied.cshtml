@@ -1,0 +1,59 @@
+﻿@{
+    Layout = "~/Views/Shared/_SavedLayout.cshtml";
+}
+@model JobPortal.Context.Application
+@{
+    ViewBag.Title = "Apply for Job";
+}
+
+<div class="container mt-5" style="max-width: 700px;">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white text-center">
+            <h4>Apply for Job</h4>
+        </div>
+
+        <div class="card-body bg-light">
+            @using (Html.BeginForm("AppliedFor", "Job", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(m => m.JobId, new { Value = ViewBag.JobId })
+
+                <div class="mb-3">
+                    <label class="form-label">Full Name</label>
+                    @Html.TextBoxFor(m => m.FullName, new { @class = "form-control", required = "required", placeholder = "Enter your full name" })
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", required = "required", type = "email", placeholder = "you@example.com" })
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Phone</label>
+                    @Html.TextBoxFor(m => m.Phone, new { @class = "form-control", required = "required", placeholder = "03XX-XXXXXXX" })
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Cover Letter</label>
+                    @Html.TextAreaFor(m => m.CoverLetter, new { @class = "form-control", rows = 4, placeholder = "Tell us why you're a great fit..." })
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Resume (PDF or DOCX)</label>
+                    <input type="file" name="ResumeFile" accept=".pdf,.doc,.docx" class="form-control" required />
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-success btn-block">Submit Application</button>
+                </div>
+            }
+
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success mt-4">
+                    @TempData["Success"]
+                </div>
+            }
+        </div>
+    </div>
+</div>

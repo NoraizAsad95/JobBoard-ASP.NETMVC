@@ -1,0 +1,37 @@
+﻿@model JobPortal.Context.JobPost
+
+@{
+    ViewBag.Title = "Post a New Job";
+}
+
+<h2>Post a New Job</h2>
+
+@using (Html.BeginForm("CreatePostJob", "Job", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label>Job Title</label>
+        @Html.TextBoxFor(m => m.Title, new { @class = "form-control", required = "required" })
+    </div>
+
+    <div class="form-group">
+        <label>Job Description</label>
+        @Html.TextAreaFor(m => m.Job_description, new { @class = "form-control", rows = 4, required = "required" })
+    </div>
+
+    <div class="form-group">
+        <label>Requirements</label>
+        @Html.TextAreaFor(m => m.Requirements, new { @class = "form-control", rows = 4 })
+    </div>
+
+    <br />
+    <button type="submit" class="btn btn-success">Post Job</button>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success mt-3">
+        @TempData["SuccessMessage"]
+    </div>
+}

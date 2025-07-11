@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="9be1465772a34da796c4d5b49bfdbcec" Name="Diagram1" ZoomLevel="52">
+        <EntityTypeShape EntityType="JobApplicationPortalModel.Application" Width="1.5" PointX="5.25" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="JobApplicationPortalModel.JobPost" Width="1.5" PointX="3" PointY="7" IsExpanded="true" />
+        <EntityTypeShape EntityType="JobApplicationPortalModel.Report" Width="1.5" PointX="8.25" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="JobApplicationPortalModel.tbl_admin" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="JobApplicationPortalModel.User" Width="1.5" PointX="0.75" PointY="3.25" IsExpanded="true" />
+        <AssociationConnector Association="JobApplicationPortalModel.FK__Applicati__JobId__5629CD9C" ManuallyRouted="false" />
+        <AssociationConnector Association="JobApplicationPortalModel.FK__Applicati__UserI__571DF1D5" ManuallyRouted="false" />
+        <AssociationConnector Association="JobApplicationPortalModel.FK__JobPosts__Posted__5165187F" ManuallyRouted="false" />
+        <AssociationConnector Association="JobApplicationPortalModel.FK__Reports__JobId__5AEE82B9" ManuallyRouted="false" />
+        <AssociationConnector Association="JobApplicationPortalModel.FK__Reports__Reporte__5BE2A6F2" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="JobApplicationPortalModel.SavedJob" Width="1.5" PointX="8.25" PointY="8.625" />
+        <AssociationConnector Association="JobApplicationPortalModel.FK__SavedJobs__JobId__70DDC3D8" />
+        <AssociationConnector Association="JobApplicationPortalModel.FK__SavedJobs__UserI__6FE99F9F" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

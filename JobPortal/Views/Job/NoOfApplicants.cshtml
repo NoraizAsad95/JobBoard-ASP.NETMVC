@@ -1,0 +1,52 @@
+﻿@{
+    Layout = "~/Views/Shared/_SavedLayout.cshtml";
+}
+@model List<JobPortal.Context.Application>
+
+@{
+    ViewBag.Title = "Applicants";
+}
+
+<h2>Applicants for this Job</h2>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Cover Letter</th>
+                <th>Resume</th>
+                <th>Applied On</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var applicant in Model)
+            {
+                <tr>
+                    <td>@applicant.FullName</td>
+                    <td>@applicant.Email</td>
+                    <td>@applicant.Phone</td>
+                    <td>@applicant.CoverLetter</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(applicant.ResumePath))
+                        {
+                            <a href="@applicant.ResumePath" target="_blank">Download</a>
+                        }
+                        else
+                        {
+                            <span>No file</span>
+                        }
+                    </td>
+                    <td>@applicant.AppliedAt</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">No applications submitted for this job yet.</div>
+}

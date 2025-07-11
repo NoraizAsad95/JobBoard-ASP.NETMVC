@@ -1,0 +1,38 @@
+﻿@{
+    Layout = "~/Views/Shared/_SavedLayout.cshtml";
+}
+@model List<JobPortal.Context.JobPost>
+@{
+    ViewBag.Title = "My Saved Jobs";
+}
+
+<h2 class="mb-4">My Saved Jobs</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">You have not saved any jobs yet.</div>
+}
+else
+{
+    <div class="row">
+        @foreach (var job in Model)
+        {
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">@job.Title</h5>
+                        <p class="card-text">
+                            @job.Job_description?.Substring(0, Math.Min(100, job.Job_description.Length))...
+                        </p>
+                        <p class="card-text">
+                            <small class="text-muted">Posted on @job.CreatedAt</small>
+                        </p>
+                        <a href="@Url.Action("BrowseJobs", "Job", new { id = job.JobId })" class="btn btn-outline-primary btn-sm">
+                            View Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

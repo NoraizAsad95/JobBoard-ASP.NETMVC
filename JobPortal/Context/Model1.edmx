@@ -1,0 +1,496 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="JobApplicationPortalModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Applications">
+          <Key>
+            <PropertyRef Name="ApplicationId" />
+          </Key>
+          <Property Name="ApplicationId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="JobId" Type="int" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="20" />
+          <Property Name="CoverLetter" Type="nvarchar(max)" />
+          <Property Name="ResumePath" Type="nvarchar" MaxLength="250" />
+          <Property Name="AppliedAt" Type="datetime" />
+        </EntityType>
+        <EntityType Name="JobPosts">
+          <Key>
+            <PropertyRef Name="JobId" />
+          </Key>
+          <Property Name="JobId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Job_description" Type="nvarchar(max)" />
+          <Property Name="Requirements" Type="nvarchar(max)" />
+          <Property Name="PostedByUserId" Type="int" />
+          <Property Name="IsReported" Type="bit" />
+          <Property Name="CreatedAt" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Reports">
+          <Key>
+            <PropertyRef Name="ReportId" />
+          </Key>
+          <Property Name="ReportId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="JobId" Type="int" />
+          <Property Name="ReportedByUserId" Type="int" />
+          <Property Name="Reason" Type="nvarchar" MaxLength="250" />
+          <Property Name="ReportedAt" Type="datetime" />
+        </EntityType>
+        <EntityType Name="SavedJobs">
+          <Key>
+            <PropertyRef Name="SavedJobId" />
+          </Key>
+          <Property Name="SavedJobId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="JobId" Type="int" />
+          <Property Name="SavedAt" Type="datetime" />
+        </EntityType>
+        <EntityType Name="tbl_admin">
+          <Key>
+            <PropertyRef Name="admin_id" />
+          </Key>
+          <Property Name="admin_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="admin_name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="admin_username" Type="varchar" MaxLength="25" />
+          <Property Name="admin_password" Type="varchar" MaxLength="25" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_fullname" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="user_email" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="user_password" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="IsEmployer" Type="bit" />
+          <Property Name="CreatedAt" Type="datetime" />
+        </EntityType>
+        <Association Name="FK__Applicati__JobId__5629CD9C">
+          <End Role="JobPosts" Type="Self.JobPosts" Multiplicity="0..1" />
+          <End Role="Applications" Type="Self.Applications" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobPosts">
+              <PropertyRef Name="JobId" />
+            </Principal>
+            <Dependent Role="Applications">
+              <PropertyRef Name="JobId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Applicati__UserI__571DF1D5">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Applications" Type="Self.Applications" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Applications">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__JobPosts__Posted__5165187F">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="JobPosts" Type="Self.JobPosts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="JobPosts">
+              <PropertyRef Name="PostedByUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reports__JobId__5AEE82B9">
+          <End Role="JobPosts" Type="Self.JobPosts" Multiplicity="0..1" />
+          <End Role="Reports" Type="Self.Reports" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobPosts">
+              <PropertyRef Name="JobId" />
+            </Principal>
+            <Dependent Role="Reports">
+              <PropertyRef Name="JobId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reports__Reporte__5BE2A6F2">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Reports" Type="Self.Reports" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Reports">
+              <PropertyRef Name="ReportedByUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__SavedJobs__JobId__70DDC3D8">
+          <End Role="JobPosts" Type="Self.JobPosts" Multiplicity="0..1" />
+          <End Role="SavedJobs" Type="Self.SavedJobs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobPosts">
+              <PropertyRef Name="JobId" />
+            </Principal>
+            <Dependent Role="SavedJobs">
+              <PropertyRef Name="JobId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__SavedJobs__UserI__6FE99F9F">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="SavedJobs" Type="Self.SavedJobs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="SavedJobs">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="JobApplicationPortalModelStoreContainer">
+          <EntitySet Name="Applications" EntityType="Self.Applications" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JobPosts" EntityType="Self.JobPosts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Reports" EntityType="Self.Reports" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SavedJobs" EntityType="Self.SavedJobs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_admin" EntityType="Self.tbl_admin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Applicati__JobId__5629CD9C" Association="Self.FK__Applicati__JobId__5629CD9C">
+            <End Role="JobPosts" EntitySet="JobPosts" />
+            <End Role="Applications" EntitySet="Applications" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Applicati__UserI__571DF1D5" Association="Self.FK__Applicati__UserI__571DF1D5">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Applications" EntitySet="Applications" />
+          </AssociationSet>
+          <AssociationSet Name="FK__JobPosts__Posted__5165187F" Association="Self.FK__JobPosts__Posted__5165187F">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="JobPosts" EntitySet="JobPosts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reports__JobId__5AEE82B9" Association="Self.FK__Reports__JobId__5AEE82B9">
+            <End Role="JobPosts" EntitySet="JobPosts" />
+            <End Role="Reports" EntitySet="Reports" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reports__Reporte__5BE2A6F2" Association="Self.FK__Reports__Reporte__5BE2A6F2">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Reports" EntitySet="Reports" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SavedJobs__JobId__70DDC3D8" Association="Self.FK__SavedJobs__JobId__70DDC3D8">
+            <End Role="JobPosts" EntitySet="JobPosts" />
+            <End Role="SavedJobs" EntitySet="SavedJobs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SavedJobs__UserI__6FE99F9F" Association="Self.FK__SavedJobs__UserI__6FE99F9F">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="SavedJobs" EntitySet="SavedJobs" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="JobApplicationPortalModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Application">
+          <Key>
+            <PropertyRef Name="ApplicationId" />
+          </Key>
+          <Property Name="ApplicationId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="JobId" Type="Int32" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="FullName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CoverLetter" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ResumePath" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="AppliedAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="JobPost" Relationship="Self.FK__Applicati__JobId__5629CD9C" FromRole="Applications" ToRole="JobPosts" />
+          <NavigationProperty Name="User" Relationship="Self.FK__Applicati__UserI__571DF1D5" FromRole="Applications" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="JobPost">
+          <Key>
+            <PropertyRef Name="JobId" />
+          </Key>
+          <Property Name="JobId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Job_description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Requirements" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PostedByUserId" Type="Int32" />
+          <Property Name="IsReported" Type="Boolean" />
+          <Property Name="CreatedAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Applications" Relationship="Self.FK__Applicati__JobId__5629CD9C" FromRole="JobPosts" ToRole="Applications" />
+          <NavigationProperty Name="User" Relationship="Self.FK__JobPosts__Posted__5165187F" FromRole="JobPosts" ToRole="Users" />
+          <NavigationProperty Name="Reports" Relationship="Self.FK__Reports__JobId__5AEE82B9" FromRole="JobPosts" ToRole="Reports" />
+          <NavigationProperty Name="SavedJobs" Relationship="JobApplicationPortalModel.FK__SavedJobs__JobId__70DDC3D8" FromRole="JobPost" ToRole="SavedJob" />
+        </EntityType>
+        <EntityType Name="Report">
+          <Key>
+            <PropertyRef Name="ReportId" />
+          </Key>
+          <Property Name="ReportId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="JobId" Type="Int32" />
+          <Property Name="ReportedByUserId" Type="Int32" />
+          <Property Name="Reason" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ReportedAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="JobPost" Relationship="Self.FK__Reports__JobId__5AEE82B9" FromRole="Reports" ToRole="JobPosts" />
+          <NavigationProperty Name="User" Relationship="Self.FK__Reports__Reporte__5BE2A6F2" FromRole="Reports" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="tbl_admin">
+          <Key>
+            <PropertyRef Name="admin_id" />
+          </Key>
+          <Property Name="admin_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="admin_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="admin_username" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="admin_password" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_fullname" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="user_email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="user_password" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IsEmployer" Type="Boolean" />
+          <Property Name="CreatedAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Applications" Relationship="Self.FK__Applicati__UserI__571DF1D5" FromRole="Users" ToRole="Applications" />
+          <NavigationProperty Name="JobPosts" Relationship="Self.FK__JobPosts__Posted__5165187F" FromRole="Users" ToRole="JobPosts" />
+          <NavigationProperty Name="Reports" Relationship="Self.FK__Reports__Reporte__5BE2A6F2" FromRole="Users" ToRole="Reports" />
+          <NavigationProperty Name="SavedJobs" Relationship="JobApplicationPortalModel.FK__SavedJobs__UserI__6FE99F9F" FromRole="User" ToRole="SavedJob" />
+        </EntityType>
+        <Association Name="FK__Applicati__JobId__5629CD9C">
+          <End Role="JobPosts" Type="Self.JobPost" Multiplicity="0..1" />
+          <End Role="Applications" Type="Self.Application" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobPosts">
+              <PropertyRef Name="JobId" />
+            </Principal>
+            <Dependent Role="Applications">
+              <PropertyRef Name="JobId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Applicati__UserI__571DF1D5">
+          <End Role="Users" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Applications" Type="Self.Application" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Applications">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__JobPosts__Posted__5165187F">
+          <End Role="Users" Type="Self.User" Multiplicity="0..1" />
+          <End Role="JobPosts" Type="Self.JobPost" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="JobPosts">
+              <PropertyRef Name="PostedByUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reports__JobId__5AEE82B9">
+          <End Role="JobPosts" Type="Self.JobPost" Multiplicity="0..1" />
+          <End Role="Reports" Type="Self.Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobPosts">
+              <PropertyRef Name="JobId" />
+            </Principal>
+            <Dependent Role="Reports">
+              <PropertyRef Name="JobId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reports__Reporte__5BE2A6F2">
+          <End Role="Users" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Reports" Type="Self.Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Reports">
+              <PropertyRef Name="ReportedByUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="JobApplicationPortalEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Applications" EntityType="Self.Application" />
+          <EntitySet Name="JobPosts" EntityType="Self.JobPost" />
+          <EntitySet Name="Reports" EntityType="Self.Report" />
+          <EntitySet Name="tbl_admin" EntityType="Self.tbl_admin" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <AssociationSet Name="FK__Applicati__JobId__5629CD9C" Association="Self.FK__Applicati__JobId__5629CD9C">
+            <End Role="JobPosts" EntitySet="JobPosts" />
+            <End Role="Applications" EntitySet="Applications" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Applicati__UserI__571DF1D5" Association="Self.FK__Applicati__UserI__571DF1D5">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Applications" EntitySet="Applications" />
+          </AssociationSet>
+          <AssociationSet Name="FK__JobPosts__Posted__5165187F" Association="Self.FK__JobPosts__Posted__5165187F">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="JobPosts" EntitySet="JobPosts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reports__JobId__5AEE82B9" Association="Self.FK__Reports__JobId__5AEE82B9">
+            <End Role="JobPosts" EntitySet="JobPosts" />
+            <End Role="Reports" EntitySet="Reports" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reports__Reporte__5BE2A6F2" Association="Self.FK__Reports__Reporte__5BE2A6F2">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Reports" EntitySet="Reports" />
+          </AssociationSet>
+          <EntitySet Name="SavedJobs" EntityType="JobApplicationPortalModel.SavedJob" />
+          <AssociationSet Name="FK__SavedJobs__JobId__70DDC3D8" Association="JobApplicationPortalModel.FK__SavedJobs__JobId__70DDC3D8">
+            <End Role="JobPost" EntitySet="JobPosts" />
+            <End Role="SavedJob" EntitySet="SavedJobs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SavedJobs__UserI__6FE99F9F" Association="JobApplicationPortalModel.FK__SavedJobs__UserI__6FE99F9F">
+            <End Role="User" EntitySet="Users" />
+            <End Role="SavedJob" EntitySet="SavedJobs" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="SavedJob">
+          <Key>
+            <PropertyRef Name="SavedJobId" />
+          </Key>
+          <Property Name="SavedJobId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="JobId" Type="Int32" />
+          <Property Name="SavedAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="JobPost" Relationship="JobApplicationPortalModel.FK__SavedJobs__JobId__70DDC3D8" FromRole="SavedJob" ToRole="JobPost" />
+          <NavigationProperty Name="User" Relationship="JobApplicationPortalModel.FK__SavedJobs__UserI__6FE99F9F" FromRole="SavedJob" ToRole="User" />
+        </EntityType>
+        <Association Name="FK__SavedJobs__JobId__70DDC3D8">
+          <End Type="JobApplicationPortalModel.JobPost" Role="JobPost" Multiplicity="0..1" />
+          <End Type="JobApplicationPortalModel.SavedJob" Role="SavedJob" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobPost">
+              <PropertyRef Name="JobId" />
+            </Principal>
+            <Dependent Role="SavedJob">
+              <PropertyRef Name="JobId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__SavedJobs__UserI__6FE99F9F">
+          <End Type="JobApplicationPortalModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="JobApplicationPortalModel.SavedJob" Role="SavedJob" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="SavedJob">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="JobApplicationPortalModelStoreContainer" CdmEntityContainer="JobApplicationPortalEntities">
+          <EntitySetMapping Name="Applications">
+            <EntityTypeMapping TypeName="JobApplicationPortalModel.Application">
+              <MappingFragment StoreEntitySet="Applications">
+                <ScalarProperty Name="ApplicationId" ColumnName="ApplicationId" />
+                <ScalarProperty Name="JobId" ColumnName="JobId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="CoverLetter" ColumnName="CoverLetter" />
+                <ScalarProperty Name="ResumePath" ColumnName="ResumePath" />
+                <ScalarProperty Name="AppliedAt" ColumnName="AppliedAt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobPosts">
+            <EntityTypeMapping TypeName="JobApplicationPortalModel.JobPost">
+              <MappingFragment StoreEntitySet="JobPosts">
+                <ScalarProperty Name="JobId" ColumnName="JobId" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Job_description" ColumnName="Job_description" />
+                <ScalarProperty Name="Requirements" ColumnName="Requirements" />
+                <ScalarProperty Name="PostedByUserId" ColumnName="PostedByUserId" />
+                <ScalarProperty Name="IsReported" ColumnName="IsReported" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Reports">
+            <EntityTypeMapping TypeName="JobApplicationPortalModel.Report">
+              <MappingFragment StoreEntitySet="Reports">
+                <ScalarProperty Name="ReportId" ColumnName="ReportId" />
+                <ScalarProperty Name="JobId" ColumnName="JobId" />
+                <ScalarProperty Name="ReportedByUserId" ColumnName="ReportedByUserId" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+                <ScalarProperty Name="ReportedAt" ColumnName="ReportedAt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_admin">
+            <EntityTypeMapping TypeName="JobApplicationPortalModel.tbl_admin">
+              <MappingFragment StoreEntitySet="tbl_admin">
+                <ScalarProperty Name="admin_id" ColumnName="admin_id" />
+                <ScalarProperty Name="admin_name" ColumnName="admin_name" />
+                <ScalarProperty Name="admin_username" ColumnName="admin_username" />
+                <ScalarProperty Name="admin_password" ColumnName="admin_password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="JobApplicationPortalModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="user_fullname" ColumnName="user_fullname" />
+                <ScalarProperty Name="user_email" ColumnName="user_email" />
+                <ScalarProperty Name="user_password" ColumnName="user_password" />
+                <ScalarProperty Name="IsEmployer" ColumnName="IsEmployer" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SavedJobs">
+            <EntityTypeMapping TypeName="JobApplicationPortalModel.SavedJob">
+              <MappingFragment StoreEntitySet="SavedJobs">
+                <ScalarProperty Name="SavedAt" ColumnName="SavedAt" />
+                <ScalarProperty Name="JobId" ColumnName="JobId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="SavedJobId" ColumnName="SavedJobId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
