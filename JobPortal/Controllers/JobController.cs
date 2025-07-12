@@ -13,10 +13,15 @@ namespace JobPortal.Controllers
         JobApplicationPortalEntities dbObj = new JobApplicationPortalEntities();
         private bool? isReported;
 
-        public ActionResult BrowseJobs(int? id)
+        public ActionResult BrowseJobs(int? id, int page = 1, int pageSize = 5)
         {
-            var allJobs = dbObj.JobPosts
-                .OrderByDescending(j => j.CreatedAt)
+            var jobsQuery = dbObj.JobPosts
+                .OrderByDescending(j => j.CreatedAt);
+
+            int totalJobs = jobsQuery.Count();
+            var paginatedJobs = jobsQuery
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToList();
 
             JobPost selectedJob = null;
@@ -26,8 +31,12 @@ namespace JobPortal.Controllers
             }
 
             ViewBag.SelectedJob = selectedJob;
-            return View(allJobs);
+            ViewBag.TotalPages = (int)Math.Ceiling((double)totalJobs / pageSize);
+            ViewBag.CurrentPage = page;
+
+            return View(paginatedJobs);
         }
+
 
         public ActionResult EmployerDashboard()
         {
